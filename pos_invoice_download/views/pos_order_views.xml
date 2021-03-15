@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="view_pos_pos_form_inherit">
+		<field name="name">pos.order.form.view</field>
+		<field name="model">pos.order</field>
+		<field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+		<field name="arch" type="xml">
+			<field name="picking_id" position="after">
+				<group>
+					<field name="txt_filename" invisible="1"/>
+					<field name="file" filename="txt_filename" nolabel="1" invisible="0"/>
+				</group>
+			</field>
+		</field>
+	</record>
+
+</odoo>

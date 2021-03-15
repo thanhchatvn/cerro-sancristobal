@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dte:GTDocumento Version="0.4" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.1.0" xmlns:xd="http://www.w3.org/2000/09/xmldsig#">
+  <dte:SAT ClaseDocumento="dte">
+    <dte:DTE ID="DatosCertificados">
+      <dte:DatosEmision ID="DatosEmision">
+        <dte:DatosGenerales CodigoMoneda="GTQ" FechaHoraEmision="2020-05-04T15:00:39" NumeroAcceso="148803806" Tipo="FACT"/>
+        <dte:Emisor AfiliacionIVA="GEN" CodigoEstablecimiento="1" CorreoEmisor="info@yourcompany.com" NITEmisor="93682425" NombreComercial="AR Studio" NombreEmisor="AR Studio">
+          <dte:DireccionEmisor>
+            <dte:Direccion>10 calle 20 - 50 zona 14 01114- Ciudad de Guatemala</dte:Direccion>
+            <dte:CodigoPostal>502</dte:CodigoPostal>
+            <dte:Municipio>Guatemala</dte:Municipio>
+            <dte:Departamento>Guatemala</dte:Departamento>
+            <dte:Pais>GT</dte:Pais>
+          </dte:DireccionEmisor>
+        </dte:Emisor>
+        <dte:Receptor CorreoReceptor="laquino@xetechs.com" IDReceptor="63505614" NombreReceptor="Luis Aquino">
+          <dte:DireccionReceptor>
+            <dte:Direccion>Lotificacion San Vicente Lote # 7, Manzana FB1</dte:Direccion>
+            <dte:CodigoPostal>502</dte:CodigoPostal>
+            <dte:Municipio>Puerto San José</dte:Municipio>
+            <dte:Departamento>Escuintla</dte:Departamento>
+            <dte:Pais>GT</dte:Pais>
+          </dte:DireccionReceptor>
+        </dte:Receptor>
+        <dte:Frases>
+          <dte:Frase CodigoEscenario="1" TipoFrase="1"/>
+        </dte:Frases>
+        <dte:Items>
+          <dte:Item BienOServicio="S" NumeroLinea="1">
+            <dte:Cantidad>1.0</dte:Cantidad>
+            <dte:UnidadMedida>UNI</dte:UnidadMedida>
+            <dte:Descripcion>Servicio de consultoria informatica</dte:Descripcion>
+            <dte:PrecioUnitario>5500.0</dte:PrecioUnitario>
+            <dte:Precio>5500.0</dte:Precio>
+            <dte:Descuento>0.0</dte:Descuento>
+            <dte:Impuestos>
+              <dte:Impuesto>
+                <dte:NombreCorto>IVA</dte:NombreCorto>
+                <dte:CodigoUnidadGravable>1</dte:CodigoUnidadGravable>
+                <dte:MontoGravable>4910.71</dte:MontoGravable>
+                <dte:MontoImpuesto>589.29</dte:MontoImpuesto>
+              </dte:Impuesto>
+            </dte:Impuestos>
+            <dte:Total>5500.0</dte:Total>
+          </dte:Item>
+        </dte:Items>
+        <dte:Totales>
+          <dte:TotalImpuestos>
+            <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="589.29"/>
+          </dte:TotalImpuestos>
+          <dte:GranTotal>5500.0</dte:GranTotal>
+        </dte:Totales>
+      </dte:DatosEmision>
+    </dte:DTE>
+    <dte:Adenda>
+      <dte:AdendaDetail ID="AdendaSummary">
+        <dte:AdendaSummary>
+          <dte:Valor1>FEL</dte:Valor1>
+          <dte:Valor2>000001</dte:Valor2>
+          <dte:Valor3>Cinco Mil Quinientos  Con 00/100.</dte:Valor3>
+          <dte:Valor4>5500.0</dte:Valor4>
+          <dte:Valor5>Pago inmediato</dte:Valor5>
+          <dte:Valor6>False</dte:Valor6>
+        </dte:AdendaSummary>
+      </dte:AdendaDetail>
+    </dte:Adenda>
+  </dte:SAT>
+</dte:GTDocumento>
