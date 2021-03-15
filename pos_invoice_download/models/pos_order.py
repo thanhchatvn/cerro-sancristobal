@@ -48,7 +48,7 @@ class PosOrder(models.Model):
 			
 			move_vals = order._prepare_invoice_vals()
 			new_move = moves.sudo()\
-							.with_context(default_type="out_invoice", force_company=order.company_id.id)\
+							.with_context(force_company=order.company_id.id)\
 							.create(move_vals)
 			message = _("This invoice has been created from the point of sale session: <a href=# data-oe-model=pos.order data-oe-id=%d>%s</a>") % (order.id, order.name)
 			new_move.message_post(body=message)
