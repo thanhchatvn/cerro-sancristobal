@@ -5,7 +5,7 @@
 			<t t-if="env.pos.get_order().invoice_number">
 				Documento Tributario Electronico
                 <br/>
-				No. Autorización: <t t-esc="env.pos.get_order().uuid"/><br />
+				No. Autorización: <t t-esc="env.pos.get_order().fel_uuid"/><br />
 				Correlativo Interno: <t t-esc="env.pos.get_order().invoice_number"/><br />
 				Serie: <t t-esc="env.pos.get_order().fel_serie"/><br />
 				Número: <t t-esc="env.pos.get_order().fel_number"/><br />
