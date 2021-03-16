@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div[hasclass('pos-receipt-contact')]" position="inside">
+			<t t-if="env.pos.get_order().invoice_number">
+				Documento Tributario Electronico
+                <br/>
+				No. Autorización: <t t-esc="env.pos.get_order().uuid"/><br />
+				Correlativo Interno: <t t-esc="env.pos.get_order().invoice_number"/><br />
+				Serie: <t t-esc="env.pos.get_order().fel_serie"/><br />
+				Número: <t t-esc="env.pos.get_order().fel_number"/><br />
+				Fecha: <t t-esc="env.pos.get_order().fel_date"/><br />
+				<!-- <br/>
+				<div style="text-align: center;">
+					<strong><u>Invoice Number</u></strong>
+					<br/>
+					<t t-esc="env.pos.get_order().invoice_number"/>
+				</div> -->
+			</t>
+		</xpath>
+	</t>
+</templates>
