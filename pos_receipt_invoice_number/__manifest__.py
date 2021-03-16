@@ -21,9 +21,7 @@
         'views/pos_config.xml',
         'views/pos_order.xml',
     ],
-    'qweb': [
-        'static/src/xml/*.xml'
-    ],
+    'qweb': ['static/src/xml/pos.xml'],
     'images': ['static/description/icon.png'],
     'post_init_hook': 'auto_action_after_install',
 }
