@@ -61,7 +61,7 @@ odoo.define('invoice_number_on_pos_receipt_app.invoice_number_print', function (
 					})
 					.then(function (output) {
 						var inv_print = output[0]['account_move'][1].split(" ")[0]
-						console.log( output  )
+						console.log( self.currentOrder  )
 						self.currentOrder.invoice_number = inv_print
 						self.currentOrder.fel_uuid = output[0]['fel_uuid']
 						self.currentOrder.fel_serie = output[0]['fel_serie']
