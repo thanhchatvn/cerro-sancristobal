@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="pos_new_view_template" inherit_id="point_of_sale.template" xml:space="preserve">
+
+	<t t-name="ProductScreen" t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div[hasclass('screen-full-width')]" position="replace">
+			<div class="screen-full-width">
+				<t t-if="!state.cashControl">
+					<div style="box-sizing: border-box;position: absolute;left: 0;width: 200px;    overflow: auto;top: 0px;bottom: 0;border-right: solid 1px #CECBCB;border-right: solid 3px #787878;background: #e2e2e2;">
+						<div class="pads">
+							<div class="control-buttons">
+								<t t-foreach="controlButtons" t-as="cb" t-key="cb.name">
+									<t t-component="cb.component" t-key="cb.name" />
+								</t>
+							</div>
+						</div>
+					</div>
+				</t>
+				<div class="leftpane" t-if="!env.isMobile || mobile_pane === 'left'">
+					<t t-if="state.cashControl">
+						<CashBoxOpening cashControl="state"/>
+					</t>
+					<t t-else="">
+						<OrderWidget/>
+						<div class="pads">
+							<div class="subpads">
+								<ActionpadWidget client="client"/>
+								<NumpadWidget activeMode="state.numpadMode" />
+							</div>
+						</div>
+						<t t-if="env.isMobile">
+							<MobileOrderWidget pane="mobile_pane" t-on-switchpane="switchPane"/>
+						</t>
+					</t>
+				</div>
+				<div class="rightpane" t-if="!env.isMobile || mobile_pane === 'right'">
+					<ProductsWidget t-if="!state.cashControl"/>
+					<t t-if="env.isMobile">
+						<MobileOrderWidget pane="mobile_pane" t-on-switchpane="switchPane"/>
+					</t>
+				</div>
+			</div>
+		</xpath>
+	</t>
+
+</templates>

@@ -1,0 +1,40 @@
+.pos .leftpane {
+    border-right: solid 3px #787878;
+    background: #e2e2e2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 600px;
+    left: 200px;
+}
+
+.pos .order-container{
+    top: 0px;
+    width:67%;
+    height: 100%;
+    background: white;
+    flex-grow: 1;
+    overflow: hidden;
+    overflow-y: auto;
+    margin-left: 200px;
+}
+
+.pos .leftpane .pads .subpads {
+    display: flex;
+    flex-direction: row;
+    margin-left: 200px;
+}
+
+.stock-tag{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    vertical-align: top;
+    color: white;
+    line-height: 13px;
+    background: #7f82ac;
+    padding: 2px 5px;
+    border-radius: 2px;
+
+}
