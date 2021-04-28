@@ -6,7 +6,7 @@
             name="pos_order_merge_assets"
             inherit_id="point_of_sale.assets"
         >
-            <xpath expr="//div[@id='company']" position="after">
+            <xpath expr="//div[@field='show_barcode']" position="after">
                 <script
                     type="text/javascript"
                     src="/pos_order_merge/static/src/js/merge.js"
