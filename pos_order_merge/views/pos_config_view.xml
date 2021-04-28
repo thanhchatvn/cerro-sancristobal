@@ -5,7 +5,7 @@
         <field name="model">pos.config</field>
         <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
         <field name="arch" type="xml"> 
-            <xpath expr="//[@field='manage_orders']" position="before"> 
+            <xpath expr="." position="inside">
                 <div>
                     <field name="iface_order_merge"/>
                 </div>         

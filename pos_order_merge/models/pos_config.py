@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import models, fields, api
+
 
 
 class PosConfig(models.Model):
