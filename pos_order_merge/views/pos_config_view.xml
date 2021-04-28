@@ -4,8 +4,16 @@
         <field name="name">pos.config.form.view.inherit</field>
         <field name="model">pos.config</field>
         <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
-        <field name="arch" type="xml">
-            <field name="iface_order_merge" />
+        <field name="arch" type="xml">          
+			<xpath expr="//h2[@name='merge']" position="before">
+				<h2 name="merge">POS Order Merge</h2>
+				<div class="row mt16 o_settings_container">
+                    <field name="iface_order_merge" />
+				</div>
+			</xpath>
         </field>
     </record>
 </odoo>
+
+
+
