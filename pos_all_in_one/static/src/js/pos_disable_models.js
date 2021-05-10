@@ -89,9 +89,16 @@ odoo.define('pos_all_in_one.disable_models', function(require) {
 			let self = this;
 			this.order.assert_editable();
 			let cashier = this.pos.get_cashier();
+
 			if(!quantity || quantity === 'remove' || quantity == 0){
 				if('is_allow_remove_orderline' in cashier){
+				    
 					if (cashier.is_allow_remove_orderline) {
+						//Start code: Restrict waiter to remove line if order sent to the kitchen
+					    if(cashier.role == 'cashier' && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer && !this.mp_dirty){
+                            return alert("Order has been sent to the Kitchen, Please contact to Manager for remove this items")
+                        }
+                        //End code: Restrict waiter to remove line if order sent to the kitchen
 						OrderlineSuper.prototype.set_quantity.apply(this, arguments);
 					}
 					else{
@@ -132,6 +139,13 @@ odoo.define('pos_all_in_one.disable_models', function(require) {
 			let cashier = this.pos.get_cashier();
 			if('is_allow_remove_orderline' in cashier){
 				if (cashier.is_allow_remove_orderline) {
+					
+					//Start code: Restrict waiter to remove line if order sent to the kitchen
+				    if(cashier.role == 'cashier' && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer && !line.mp_dirty){
+				        return alert("Order has been sent to the Kitchen, Please contact to Manager for remove this items")
+				    }
+					//End code: Restrict waiter to remove line if order sent to the kitchen
+				    
 					let prod = line.product;
 					if(prod && prod.is_coupon_product){
 						this.set_is_coupon_used(false);
@@ -145,7 +159,6 @@ odoo.define('pos_all_in_one.disable_models', function(require) {
 					alert("Sorry,You have no access to remove orderline");
 				}
 			}
-			
 		},
 	});
 });
