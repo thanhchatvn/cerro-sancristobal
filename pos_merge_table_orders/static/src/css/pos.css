@@ -1,0 +1,14 @@
+
+.selected-marge-table{
+    background: #6EC89B;
+    color:white;
+}
+
+.merge-table{
+	float: left;
+	width: 155px;
+	font-size: 13px;
+	height: 50px;
+	border: 1px solid;
+	margin: 2px;
+}
