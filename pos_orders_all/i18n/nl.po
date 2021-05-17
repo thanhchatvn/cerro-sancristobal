@@ -64,13 +64,6 @@ msgid "<strong>Expiry Date:</strong>"
 msgstr "<strong>Vervaldatum:</strong>"
 
 #. module: pos_orders_all
-#. openerp-web
-#: code:addons/pos_orders_all/static/src/js/pos_orders_all.js:0
-#, python-format
-msgid "A Customer Name Is Required"
-msgstr "Een klantnaam is vereist"
-
-#. module: pos_orders_all
 #: model:ir.model.fields,field_description:pos_orders_all.field_pos_coupons_setting__active
 #: model:ir.model.fields,field_description:pos_orders_all.field_pos_gift_coupon__active
 msgid "Active"

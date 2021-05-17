@@ -85,14 +85,27 @@ odoo.define('pos_all_in_one.disable_models', function(require) {
 
 	var OrderlineSuper = models.Orderline;
 	models.Orderline = models.Orderline.extend({
+	    can_be_merged_with: function(orderline){
+            var res = OrderlineSuper.prototype.can_be_merged_with.apply(this, arguments);
+            var self = this;
+            console.log("can be merge ===", res)
+            let cashier = this.pos.get_cashier();
+            if(res && cashier.role == 'cashier' && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer && !this.mp_dirty){
+                res = false;
+            }
+            return res
+        },
 		set_quantity: function(quantity, keep_price){
 			let self = this;
 			this.order.assert_editable();
 			let cashier = this.pos.get_cashier();
-
+            //Start code: Restrict waiter to remove line if order sent to the kitchen
+            if(quantity > 0 && this.mp_dirty == false && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer){
+                return alert("You can not add quantity as the item already sent to the kitchen, Please add items newly by clicking on product")
+            }
+            //End code: Restrict waiter to remove line if order sent to the kitchen
 			if(!quantity || quantity === 'remove' || quantity == 0){
 				if('is_allow_remove_orderline' in cashier){
-				    
 					if (cashier.is_allow_remove_orderline) {
 						//Start code: Restrict waiter to remove line if order sent to the kitchen
 					    if(cashier.role == 'cashier' && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer && !this.mp_dirty){
@@ -140,11 +153,11 @@ odoo.define('pos_all_in_one.disable_models', function(require) {
 			if('is_allow_remove_orderline' in cashier){
 				if (cashier.is_allow_remove_orderline) {
 					
-					//Start code: Restrict waiter to remove line if order sent to the kitchen
-				    if(cashier.role == 'cashier' && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer && !line.mp_dirty){
-				        return alert("Order has been sent to the Kitchen, Please contact to Manager for remove this items")
-				    }
-					//End code: Restrict waiter to remove line if order sent to the kitchen
+//					//Start code: Restrict waiter to remove line if order sent to the kitchen
+//				    if(cashier.role == 'cashier' && self.pos.config.module_pos_restaurant && self.pos.config.is_order_printer && !line.mp_dirty){
+//				        return alert("Order has been sent to the Kitchen, Please contact to Manager for remove this items")
+//				    }
+//					//End code: Restrict waiter to remove line if order sent to the kitchen
 				    
 					let prod = line.product;
 					if(prod && prod.is_coupon_product){

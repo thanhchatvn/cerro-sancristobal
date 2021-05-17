@@ -34,23 +34,30 @@ odoo.define('pos_orders_all.ReOrderPopup', function(require) {
 				reorder_products[line_id] = entered_qty;
 			});
 			
+			let invalid_prod = false;
 			$.each( reorder_products, function( key, value ) {
 				orderlines.forEach(function(ol) {
 					if(ol.id == key && value > 0){
 						let product = self.env.pos.db.get_product_by_id(ol.product_id[0]);
-						selectedOrder.add_product(product, {
-							quantity: parseFloat(value),
-							price: ol.price_unit,
-							discount: ol.discount,
-						});
+						if(product){
+							selectedOrder.add_product(product, {
+								quantity: parseFloat(value),
+								price: ol.price_unit,
+								discount: ol.discount,
+							});
+						}else{
+							invalid_prod = true;
+							alert("Please configure Product:( "+ol.product_id[1]+" ) for POS.")
+						}
 					}
 				});
 			});
-
+			
 			selectedOrder.set_client(client);
 			self.props.resolve({ confirmed: true, payload: null });
 			self.trigger('close-popup');
 			self.trigger('close-temp-screen');
+			
 		}
 	}
 	

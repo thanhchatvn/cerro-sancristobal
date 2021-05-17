@@ -57,17 +57,24 @@ odoo.define('pos_orders_all.ReturnOrderPopup', function(require) {
 				}
 			});
 			
+			let invalid_prod = false;
 			$.each( return_products, function( key, value ) {
 				orderlines.forEach(function(ol) {
 					if(ol.id == key && value > 0){
 						let product = self.env.pos.db.get_product_by_id(ol.product_id[0]);
-						selectedOrder.add_product(product, {
-							quantity: - parseFloat(value),
-							price: ol.price_unit,
-							discount: ol.discount,
-						});
-						selectedOrder.set_return_order_ref(ol.order_id[0]);
-						selectedOrder.selected_orderline.set_original_line_id(ol.id);
+
+						if(product){
+							selectedOrder.add_product(product, {
+								quantity: - parseFloat(value),
+								price: ol.price_unit,
+								discount: ol.discount,
+							});
+							selectedOrder.set_return_order_ref(ol.order_id[0]);
+							selectedOrder.selected_orderline.set_original_line_id(ol.id);
+						}else{
+							invalid_prod = true;
+							alert("Please configure Product:( "+ol.product_id[1]+" ) for POS.")
+						}
 					}
 				});
 			});
@@ -76,6 +83,7 @@ odoo.define('pos_orders_all.ReturnOrderPopup', function(require) {
 			self.props.resolve({ confirmed: true, payload: null });
 			self.trigger('close-popup');
 			self.trigger('close-temp-screen');
+			
 		}
 	}
 	

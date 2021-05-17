@@ -12,6 +12,7 @@ from odoo.tools import float_is_zero
 from odoo.exceptions import UserError
 from odoo.http import request
 import odoo.addons.decimal_precision as dp
+from odoo.osv.expression import AND
 
 _logger = logging.getLogger(__name__)
 
@@ -212,50 +213,62 @@ class ReportSaleDetailsInherit(models.AbstractModel):
 	_inherit = 'report.point_of_sale.report_saledetails'
 
 	@api.model
-	def get_sale_details(self, date_start=False, date_stop=False, configs=False):
-		""" Serialise the orders of the day information
+	def get_sale_details(self, date_start=False, date_stop=False, config_ids=False, session_ids=False):
+		""" Serialise the orders of the requested time period, configs and sessions.
 
-		params: date_start, date_stop string representing the datetime of order
+		:param date_start: The dateTime to start, default today 00:00:00.
+		:type date_start: str.
+		:param date_stop: The dateTime to stop, default date_start + 23:59:59.
+		:type date_stop: str.
+		:param config_ids: Pos Config id's to include.
+		:type config_ids: list of numbers.
+		:param session_ids: Pos Config id's to include.
+		:type session_ids: list of numbers.
+
+		:returns: dict -- Serialised sales.
 		"""
-		if not configs:
-			configs = self.env['pos.config'].search([])
 
-		user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
-		today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self)))
-		today = today.astimezone(pytz.timezone('UTC'))
-		if date_start:
-			date_start = fields.Datetime.from_string(date_start)
+		domain = [('state', 'in', ['paid','invoiced','done'])]
+
+		if (session_ids):
+			domain = AND([domain, [('session_id', 'in', session_ids)]])
 		else:
-			# start by default today 00:00:00
-			date_start = today
+			if date_start:
+				date_start = fields.Datetime.from_string(date_start)
+			else:
+				# start by default today 00:00:00
+				user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
+				today = user_tz.localize(fields.Datetime.from_string(fields.Date.context_today(self)))
+				date_start = today.astimezone(pytz.timezone('UTC'))
 
-		if date_stop:
-			# set time to 23:59:59
-			date_stop = fields.Datetime.from_string(date_stop)
-		else:
-			# stop by default today 23:59:59
-			date_stop = today + timedelta(days=1, seconds=-1)
+			if date_stop:
+				date_stop = fields.Datetime.from_string(date_stop)
+				# avoid a date_stop smaller than date_start
+				if (date_stop < date_start):
+					date_stop = date_start + timedelta(days=1, seconds=-1)
+			else:
+				# stop by default today 23:59:59
+				date_stop = date_start + timedelta(days=1, seconds=-1)
 
-		# avoid a date_stop smaller than date_start
-		date_stop = max(date_stop, date_start)
+			domain = AND([domain,
+				[('date_order', '>=', fields.Datetime.to_string(date_start)),
+				('date_order', '<=', fields.Datetime.to_string(date_stop))]
+			])
 
-		date_start = fields.Datetime.to_string(date_start)
-		date_stop = fields.Datetime.to_string(date_stop)
+			if config_ids:
+				domain = AND([domain, [('config_id', 'in', config_ids)]])
 
-		orders = self.env['pos.order'].search([
-			('date_order', '>=', date_start),
-			('date_order', '<=', date_stop),
-			('state', 'in', ['paid','invoiced','done']),
-			('config_id', 'in', configs.ids)])
+		orders = self.env['pos.order'].search(domain)
 
-		user_currency = self.env.user.company_id.currency_id
+		user_currency = self.env.company.currency_id
 
 		total = 0.0
 		products_sold = {}
 		taxes = {}
 		for order in orders:
 			if user_currency != order.pricelist_id.currency_id:
-				total += order.pricelist_id.currency_id.compute(order.amount_total, user_currency)
+				total += order.pricelist_id.currency_id._convert(
+					order.amount_total, user_currency, order.company_id, order.date_order or fields.Date.today())
 			else:
 				total += order.amount_total
 			currency = order.session_id.currency_id
@@ -275,18 +288,16 @@ class ReportSaleDetailsInherit(models.AbstractModel):
 					taxes.setdefault(0, {'name': _('No Taxes'), 'tax_amount':0.0, 'base_amount':0.0})
 					taxes[0]['base_amount'] += line.price_subtotal_incl
 
-		st_line_ids = self.env["account.bank.statement.line"].search([('pos_statement_id', 'in', orders.ids)]).ids
-		if st_line_ids:
+		payment_ids = self.env["pos.payment"].search([('pos_order_id', 'in', orders.ids)]).ids
+		if payment_ids:
 			self.env.cr.execute("""
-				SELECT aj.name, sum(amount) total
-				FROM account_bank_statement_line AS absl,
-					 account_bank_statement AS abs,
-					 account_journal AS aj 
-				WHERE absl.statement_id = abs.id
-					AND abs.journal_id = aj.id 
-					AND absl.id IN %s 
-				GROUP BY aj.name
-			""", (tuple(st_line_ids),))
+				SELECT method.name, sum(amount) total
+				FROM pos_payment AS payment,
+					 pos_payment_method AS method
+				WHERE payment.payment_method_id = method.id
+					AND payment.id IN %s
+				GROUP BY method.name
+			""", (tuple(payment_ids),))
 			payments = self.env.cr.dictfetchall()
 		else:
 			payments = []
