@@ -21,6 +21,27 @@ odoo.define('pos_all_in_one.BiPaymentScreen', function(require) {
 			$('#details').hide()
 		}
 
+		async selectClient() {
+			let order = this.env.pos.get_order();
+			let self = this;
+			if(order.redeem_done){
+				this.showPopup('ErrorPopup',{
+					'title': this.env._t('Cannot Change Customer'),
+					'body': this.env._t('Sorry, you redeemed product, please remove it before changing customer.'),
+				}); 
+			}else{
+				const currentClient = this.currentOrder.get_client();
+				const { confirmed, payload: newClient } = await this.showTempScreen(
+					'ClientListScreen',
+					{ client: currentClient }
+				);
+				if (confirmed) {
+					this.currentOrder.set_client(newClient);
+					this.currentOrder.updatePricelist(newClient);
+				}
+			}
+		}
+
 
 		_UpdateDetails() {
 			if($("#cur-switch").prop('checked') == true)

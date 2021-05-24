@@ -28,3 +28,17 @@ Version 14.0.1.6 : (06/04/21)
 		- Solve issue of product template load when "Restrict Available Product Categories" is set.
 		- Solve pos_internal_transfer load js issue.
 		- Solve Backend reports printing issue for same date.
+
+Version 14.0.1.7 : (27/04/21)
+		- Solve product edit from pos front side issue.
+
+Version 14.0.1.8 : (28/04/21)
+		- Update code for remove orderline for loyalty redemption.
+		- Add warning to restrict user to change customer after redeem in pos.
+
+Version 14.0.1.9 : (06/05/21)
+		- Solved multiple config archive issue.
+		- Add warning to restrict user to change customer from payment screen, after redeem in pos.
+
+Version 14.0.2.0 : (24/05/21)
+		- Hide/Show 'action buttons',update css and also made compatible with mobile view. 

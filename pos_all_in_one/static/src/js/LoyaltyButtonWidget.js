@@ -25,7 +25,7 @@ odoo.define('pos_all_in_one.LoyaltyButtonWidget', function(require) {
 						loyalty_points = partner.loyalty_points;
 					}
 										
-					if(order.get('redeem_done')){
+					if(order.redeem_done){
 						this.showPopup('ErrorPopup',{
 							'title': this.env._t('Redeem Product'),
 							'body': this.env._t('Sorry, you already added the redeem product.'),

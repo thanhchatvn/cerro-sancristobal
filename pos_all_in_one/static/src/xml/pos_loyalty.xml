@@ -3,7 +3,7 @@
 
 		<t t-name="OrderWidget" t-inherit="point_of_sale.OrderWidget" t-inherit-mode="extension" owl="1">
 			<xpath expr="//div[hasclass('order')]" position="inside">
-				<t t-if="env.pos.get_client() and env.pos.pos_loyalty_setting.length > 0">
+				<t t-if="env.pos.get_client() and loyalty_points and env.pos.pos_loyalty_setting.length > 0">
 					<div class='loyalty-items' style="padding-bottom: 10px; padding-left: 15px;padding-right: 15px;"><i><b style="font-weight: bold; color: #0075AC;font-size: 20px;">+ 
 						<span><t t-esc="loyalty_points"/></span> Loyalty Points. Total:<span><t t-esc="temp_loyalty_point"/></span></b></i>
 					</div>

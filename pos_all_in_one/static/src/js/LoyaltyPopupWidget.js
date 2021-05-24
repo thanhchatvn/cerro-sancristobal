@@ -75,7 +75,7 @@ odoo.define('pos_all_in_one.LoyaltyPopupWidget', function(require){
 			let remove_line;	
 			let loyalty = self.loyalty;
 
-			if(redeem.min_amt <= loyalty &&  loyalty<= redeem.max_amt)
+			if(redeem && redeem.min_amt <= loyalty &&  loyalty<= redeem.max_amt)
 			{
 				if(parseInt(entered_code) <= loyalty)
 				{
@@ -93,7 +93,7 @@ odoo.define('pos_all_in_one.LoyaltyPopupWidget', function(require){
 						remove_line = orderlines.models[orderlines.length-1].id
 						order.redeemed_points = parseInt(entered_code);
 						order.set('update_after_redeem',update_orderline_loyalty)
-						order.set('redeem_done', true);
+						order.redeem_done = true;
 						order.set("redeem_point",parseInt(entered_code));
 						order.set('remove_line', remove_line);
 						self.trigger('close-popup')

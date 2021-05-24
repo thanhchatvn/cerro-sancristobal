@@ -45,13 +45,13 @@ class POSConfigInherit(models.Model):
 
 	def write(self, vals):
 		res=super(POSConfigInherit, self).write(vals)
+		for rec in self:
+			if rec.allow_partical_payment == True:
+				if rec.partial_product_id.available_in_pos != True:
+					raise ValidationError(_('Please enable available in POS for the Partial Payment Product'))
 
-		if self.allow_partical_payment == True:
-			if self.partial_product_id.available_in_pos != True:
-				raise ValidationError(_('Please enable available in POS for the Partial Payment Product'))
-
-			if self.partial_product_id.taxes_id:
-				raise ValidationError(_('You are not allowed to add Customer Taxes in the Partial Payment Product'))
+				if rec.partial_product_id.taxes_id:
+					raise ValidationError(_('You are not allowed to add Customer Taxes in the Partial Payment Product'))
 
 		return res
 

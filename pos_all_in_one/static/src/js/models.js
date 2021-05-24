@@ -41,7 +41,6 @@ odoo.define('pos_all_in_one.models', function(require) {
 			posorder_super.initialize.call(this,attr,options);
 		},
 
-
 		init: function(parent, options) {
 			var self = this;
 			this._super(parent,options);

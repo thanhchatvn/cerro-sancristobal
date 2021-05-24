@@ -20,7 +20,15 @@ odoo.define('pos_all_in_one.BiProductScreen', function(require) {
 		class extends ProductScreen {
 			constructor() {
 				super(...arguments);
+				useListener('click-actions', this._onClickHideButtons);
+				this.show_buttons = true;
 			}
+
+			_onClickHideButtons(event){
+				this.show_buttons = ! this.show_buttons ;
+				this.render();
+			}
+
 			async _clickProduct(event) {
 				var self = this;
 				const product = event.detail;
@@ -103,6 +111,27 @@ odoo.define('pos_all_in_one.BiProductScreen', function(require) {
 					}
 					if(call_super){
 						super._clickProduct(event);
+					}
+				}
+			}
+
+			async _onClickCustomer() {
+				let order = this.env.pos.get_order();
+				let self = this;
+				if(order.redeem_done){
+					this.showPopup('ErrorPopup',{
+						'title': this.env._t('Cannot Change Customer'),
+						'body': this.env._t('Sorry, you redeemed product, please remove it before changing customer.'),
+					}); 
+				}else{
+					const currentClient = this.currentOrder.get_client();
+					const { confirmed, payload: newClient } = await this.showTempScreen(
+						'ClientListScreen',
+						{ client: currentClient }
+					);
+					if (confirmed) {
+						this.currentOrder.set_client(newClient);
+						this.currentOrder.updatePricelist(newClient);
 					}
 				}
 			}

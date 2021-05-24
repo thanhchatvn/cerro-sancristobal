@@ -30,7 +30,7 @@ class ProductProduct(models.Model):
 						product['price_extra'] = product.get('list_price').replace(',','.')
 						AttributePrice = self.env['product.attribute.value']
 						prices = AttributePrice.search([
-							('value_id','in',[prod.product_template_attribute_value_ids.id]),
+							('value_id','in',[prod.product_template_attribute_value_ids.ids]),
 							('product_tmpl_id', '=', prod.product_tmpl_id.id)
 						])
 						updated = prices.mapped('value_id')
@@ -95,12 +95,14 @@ class ProductProduct(models.Model):
 				})
 		else:
 			if product_id:  # Modifying existing product
-				if product.get('cost_price'):
+				if product.get('cost_price') or product.get('cost_price') == 0 :
 					standard_price = product.pop('cost_price',0.0)
 					product.update({
 						'standard_price' : float(standard_price)
 					})
-				self.browse(product_id).write(product)
+					self.browse(product_id).write(product)
+				else:
+					self.browse(product_id).write(product)
 			else:
 				product_id = self.create({
 					'name':product.get('name'),

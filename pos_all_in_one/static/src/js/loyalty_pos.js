@@ -43,29 +43,34 @@ odoo.define('pos_all_in_one.loyalty_pos', function(require) {
 	
 	let OrderSuper = models.Order.prototype;
 	models.Order = models.Order.extend({
+		
 		initialize: function(attributes, options) {
 			OrderSuper.initialize.apply(this, arguments);
+			let self = this;
 			this.loyalty = this.loyalty  || 0;
 			this.redeemed_points = this.redeemed_points || 0;
 			this.redeem_done = this.redeem_done || false;
+			setInterval(function(){ 
+				self.pos.load_new_partners();
+			}, 10000);
 		},
-		
-		remove_orderline: function(line) {
-			this.set('redeem_done', false);
-			if(line.id ==this.get('remove_line'))
-			{
-				this.set('remove_true', true);
-				let partner = this.get_client();
-				if (partner) {
-					partner.loyalty_points = parseInt(partner.loyalty_points) + parseInt(this.get('redeem_point')) ;
-				}
-			}
-			else
-			{
-				this.set('remove_true', false);
-			}
-			OrderSuper.remove_orderline.apply(this, arguments);
-		},
+
+		// remove_orderline: function(line) {
+		// 	this.set('redeem_done', false);
+		// 	if(line.id ==this.get('remove_line'))
+		// 	{
+		// 		this.set('remove_true', true);
+		// 		let partner = this.get_client();
+		// 		if (partner) {
+		// 			partner.loyalty_points = parseInt(partner.loyalty_points) + parseInt(this.get('redeem_point')) ;
+		// 		}
+		// 	}
+		// 	else
+		// 	{
+		// 		this.set('remove_true', false);
+		// 	}
+		// 	OrderSuper.remove_orderline.apply(this, arguments);
+		// },
 
 		get_redeemed_points: function() {
 			return parseInt(this.redeemed_points);
@@ -118,7 +123,7 @@ odoo.define('pos_all_in_one.loyalty_pos', function(require) {
 			let json = OrderSuper.export_as_JSON.apply(this, arguments);
 			json.redeemed_points = parseInt(this.redeemed_points);
 			json.loyalty = this.get_total_loyalty();
-			json.redeem_done = this.get('redeem_done');
+			json.redeem_done = this.redeem_done || false;
 			return json;
 		},
 
